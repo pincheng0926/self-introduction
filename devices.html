@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="王品程的日常與收藏裝置介紹">
+  <title>我的裝置｜王品程</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: rgba(20, 29, 53, .78);
+      --text: #eef3ff;
+      --muted: #aab6d1;
+      --accent: #68d5ff;
+      --accent2: #9b8cff;
+      --line: rgba(255,255,255,.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; color: var(--text);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(104,213,255,.16), transparent 32rem),
+        radial-gradient(circle at 85% 35%, rgba(155,140,255,.16), transparent 30rem),
+        var(--bg);
+      line-height: 1.7;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(920px, calc(100% - 40px)); margin: auto; }
+    header {
+      position: sticky; top: 0; z-index: 5;
+      backdrop-filter: blur(16px); background: rgba(11,16,32,.72);
+      border-bottom: 1px solid var(--line);
+    }
+    nav { min-height: 68px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .logo { font-weight: 900; letter-spacing: 1px; color: var(--accent); }
+    .navlinks { display:flex; gap:24px; color:var(--muted); font-size:.94rem; }
+    .navlinks a:hover, .navlinks a:focus-visible, .navlinks a.active { color:var(--accent); outline:none; }
+
+    .page-head { padding: 52px 0 18px; }
+    .eyebrow { color:var(--accent); font-weight:700; letter-spacing:2px; font-size:.85rem; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); line-height:1.15; margin:10px 0 12px; }
+    .sub { color:var(--muted); margin:0; max-width:680px; }
+    .sub code { color: var(--accent); }
+
+    /* 分類快速跳轉按鈕 */
+    .jump-bar { display:flex; flex-wrap:wrap; gap:10px; margin-top: 24px; }
+    .jump-btn {
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      font-size: .9rem;
+      font-weight: 600;
+      transition: .2s;
+    }
+    .jump-btn:hover {
+      background: linear-gradient(100deg,var(--accent),var(--accent2));
+      color: #081020;
+      border-color: transparent;
+      transform: translateY(-2px);
+    }
+
+    .category-section {
+      padding: 36px 0 16px;
+      scroll-margin-top: 76px;
+    }
+    .category-title {
+      font-size: 1.45rem;
+      margin: 0 0 18px;
+      padding-left: 14px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .device-list { display:flex; flex-direction:column; gap:20px; }
+    .device-row {
+      display:flex;
+      align-items:stretch;
+      overflow:hidden;
+      border-radius:20px;
+      background:var(--panel);
+      border:1px solid var(--line);
+    }
+    .device-thumb {
+      width: 280px;
+      flex-shrink: 0;
+      object-fit: cover;
+      background: rgba(255,255,255,.04);
+      border-right: 1px solid var(--line);
+      display:block;
+    }
+    .device-body {
+      padding: 24px 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .device-tag {
+      display:inline-block;
+      align-self:flex-start;
+      font-size:.76rem;
+      color:var(--accent);
+      border:1px solid rgba(104,213,255,.35);
+      padding:2px 10px;
+      border-radius:999px;
+      margin-bottom:10px;
+    }
+    .device-body h3 { margin:0 0 8px; font-size:1.25rem; }
+    .device-body p { margin:0; color:var(--muted); font-size:.95rem; line-height:1.85; }
+
+    .back-row { padding: 36px 0 64px; }
+    .btn {
+      display:inline-block; padding:11px 22px; border-radius:999px;
+      border:1px solid var(--line); font-weight:700; transition:.2s;
+    }
+    .btn.primary { background:linear-gradient(100deg,var(--accent),var(--accent2)); color:#081020; border:0; }
+    .btn:hover { transform:translateY(-2px); }
+
+    footer { padding:28px 0 38px; text-align:center; color:#8491ad; font-size:.88rem; border-top:1px solid var(--line); }
+
+    @media (max-width:720px) {
+      .device-row { flex-direction: column; }
+      .device-thumb {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .device-body { padding: 20px; }
+      .navlinks { gap:14px; font-size:.85rem; }
+      .wrap { width:min(100% - 28px, 920px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap" aria-label="主導覽列">
+      <a class="logo" href="index.html">品程的數位空間</a>
+      <div class="navlinks">
+        <a href="index.html#about">關於我</a>
+        <a href="index.html#interests">興趣</a>
+        <a href="index.html#skills">技能</a>
+        <a class="active" href="devices.html">我的裝置</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <div class="page-head">
+      <div class="eyebrow">DEVICES & GEAR</div>
+      <h1>我身邊的裝置</h1>
+      <p class="sub">點選下方分類可快速跳轉到對應區塊，裝置圖片放進 <code>images/</code> 資料夾即可顯示。</p>
+      <div class="jump-bar" aria-label="裝置分類快速跳轉">
+        <a class="jump-btn" href="#pc">🖥️ 電腦</a>
+        <a class="jump-btn" href="#phones">📱 手機</a>
+        <a class="jump-btn" href="#others">🎧 其他設備</a>
+      </div>
+    </div>
+
+    <section id="pc" class="category-section">
+        <div class="device-list">
+        <article class="device-row">
+          <img class="device-thumb" src="images/desktop-pc.jpg" alt="桌上型電腦示意圖" onerror="this.style.display='none'">
+          <div class="device-body">
+            <h3>桌機 Desktop</h3>
+            <p>
+                配置是<br>
+              CPU：AMD Ryzen 5 7500F<br>
+              GPU：GIGABYTE RTX 5060 EAGLE OC<br>
+              RAM：美光 DDR5-5600 16G×2 (32G)<br>
+              SSD：雷克沙 NM790 M.2 2280 1TB 
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+      <section id="phones" class="category-section">
+      <h2 class="category-title">手機</h2>
+      <div class="device-list">
+        <article class="device-row">
+          <img class="device-thumb" src="images/main-phone.jpg" alt="主力手機示意圖" onerror="this.style.display='none'">
+          <div class="device-body">
+            
+            <h3>日常主力手機</h3>
+            <p>填寫型號、處理器、相機規格與日常使用心得。</p>
+          </div>
+        </article>
+
+        <article class="device-row">
+          <img class="device-thumb" src="images/backup-phone.jpg" alt="備用與收藏手機示意圖" onerror="this.style.display='none'">
+          <div class="device-body">
+            <h3>備用與經典手機</h3>
+            <p>填寫用來測試刷機、聽音樂或收藏的經典手機。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="others" class="category-section">
+      <div class="device-list">
+        <article class="device-row">
+          <img class="device-thumb" src="images/other-gear.jpg" alt="其他設備示意圖" onerror="this.style.display='none'">
+          <div class="device-body">
+            <h3>其他周邊設備</h3>
+            <p>填寫平板、智慧手環、有線或藍牙耳機等日常周邊。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="back-row">
+      <a class="btn primary" href="index.html">← 回到首頁</a>
+    </div>
+  </main>
+
+  <footer>© 2026 品程的數位空間 版權所有，請勿盜用</footer>
+</body>
+</html>

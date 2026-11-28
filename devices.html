@@ -77,10 +77,32 @@
         0 12px 36px rgba(44,72,120,.16);
     }
     html[data-liquid-glass="true"] .navlinks.open {
-      background:rgba(20,29,53,.92);
+      background:rgba(20,29,53,.78);
     }
     html[data-theme="light"][data-liquid-glass="true"] .navlinks.open {
-      background:rgba(255,255,255,.92);
+      background:rgba(255,255,255,.78);
+    }
+    html[data-liquid-glass="true"] header {
+      background:rgba(11,16,32,.58);
+    }
+    html[data-theme="light"][data-liquid-glass="true"] header {
+      background:rgba(255,255,255,.68);
+    }
+    html[data-liquid-glass="true"] .device-row,
+    html[data-liquid-glass="true"] .jump-btn,
+    html[data-liquid-glass="true"] .btn,
+    html[data-liquid-glass="true"] .theme-toggle,
+    html[data-liquid-glass="true"] .menu-toggle,
+    html[data-liquid-glass="true"] .mobile-theme-toggle {
+      background:rgba(20,29,53,.68);
+    }
+    html[data-theme="light"][data-liquid-glass="true"] .device-row,
+    html[data-theme="light"][data-liquid-glass="true"] .jump-btn,
+    html[data-theme="light"][data-liquid-glass="true"] .btn,
+    html[data-theme="light"][data-liquid-glass="true"] .theme-toggle,
+    html[data-theme="light"][data-liquid-glass="true"] .menu-toggle,
+    html[data-theme="light"][data-liquid-glass="true"] .mobile-theme-toggle {
+      background:rgba(255,255,255,.72);
     }
     .mobile-theme-toggle { display:none; }
     .menu-toggle {
@@ -308,10 +330,21 @@
       const buttons = document.querySelectorAll('[data-theme-toggle]');
       const saved = localStorage.getItem('theme');
       const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-      const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
+      const ua = navigator.userAgent || '';
+      const isIOSDevice = /iP(hone|ad|od)/.test(ua) ||
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      const iosVersion = (navigator.userAgent.match(/OS (\d+)[_]/) || [])[1];
-      root.dataset.liquidGlass = String(isIOS && iosVersion && Number(iosVersion) >= 26);
+      const iosVersionMatch = ua.match(/(?:CPU )?(?:iPhone )?OS (\d+)[_\.]/i) ||
+        ua.match(/iPad(?: OS)?\/(\d+)[_\.]/i);
+      const iosMajor = iosVersionMatch ? Number(iosVersionMatch[1]) : null;
+      const supportsBackdropFilter = typeof CSS !== 'undefined' && (
+        CSS.supports('-webkit-backdrop-filter', 'blur(28px)') ||
+        CSS.supports('backdrop-filter', 'blur(28px)')
+      );
+      const liquidGlassEnabled = supportsBackdropFilter && isIOSDevice &&
+        iosMajor !== null && iosMajor >= 26;
+      root.dataset.liquidGlass = String(liquidGlassEnabled);
+      root.dataset.iosVersion = iosMajor === null ? 'unknown' : String(iosMajor);
+      root.dataset.backdropFilter = String(supportsBackdropFilter);
 
       function applyTheme(theme) {
         root.dataset.theme = theme;

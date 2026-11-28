@@ -9,11 +9,25 @@
     :root {
       --bg: #0b1020;
       --panel: rgba(20, 29, 53, .78);
+      --header-bg: rgba(11,16,32,.72);
+      --footer-text: #8491ad;
       --text: #eef3ff;
       --muted: #aab6d1;
       --accent: #68d5ff;
       --accent2: #9b8cff;
       --line: rgba(255,255,255,.12);
+    }
+    html[data-theme="light"] {
+      --bg: #edf5ff;
+      --panel: rgba(255,255,255,.88);
+      --header-bg: rgba(255,255,255,.86);
+      --footer-text: #687794;
+      --text: #17233a;
+      --muted: #60708b;
+      --accent: #087db7;
+      --accent2: #7259cf;
+      --line: rgba(40,68,112,.13);
+      color-scheme: light;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -30,13 +44,20 @@
     .wrap { width: min(920px, calc(100% - 40px)); margin: auto; }
     header {
       position: sticky; top: 0; z-index: 5;
-      backdrop-filter: blur(16px); background: rgba(11,16,32,.72);
+      backdrop-filter: blur(16px); background: var(--header-bg);
       border-bottom: 1px solid var(--line);
     }
-    nav { min-height: 68px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
-    .logo { font-weight: 900; letter-spacing: 1px; color: var(--accent); }
-    .navlinks { display:flex; gap:24px; color:var(--muted); font-size:.94rem; }
+    nav { min-height: 68px; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(42px,1fr); align-items:center; gap:20px; }
+    .logo { justify-self:start; font-weight: 900; letter-spacing: 1px; color: var(--accent); }
+    .navlinks { justify-self:center; display:flex; gap:24px; color:var(--muted); font-size:.94rem; white-space:nowrap; }
     .navlinks a:hover, .navlinks a:focus-visible, .navlinks a.active { color:var(--accent); outline:none; }
+    .theme-toggle {
+      justify-self:end; width:42px; height:42px; padding:0;
+      display:grid; place-items:center; border:1px solid var(--line);
+      border-radius:50%; background:var(--panel); color:var(--text);
+      cursor:pointer; font-size:1.1rem; transition:.2s;
+    }
+    .theme-toggle:hover { transform:translateY(-2px); border-color:var(--accent); }
 
     .page-head { padding: 52px 0 18px; }
     .eyebrow { color:var(--accent); font-weight:700; letter-spacing:2px; font-size:.85rem; }
@@ -105,6 +126,18 @@
 
     footer { padding:28px 0 38px; text-align:center; color:#8491ad; font-size:.88rem; border-top:1px solid var(--line); }
 
+    html[data-theme="light"] body {
+      background:
+        radial-gradient(circle at 15% 10%, rgba(104,213,255,.22), transparent 32rem),
+        radial-gradient(circle at 85% 35%, rgba(155,140,255,.18), transparent 30rem),
+        var(--bg);
+    }
+    html[data-theme="light"] .btn.primary { color:#fff; }
+    html[data-theme="light"] .jump-btn { background:rgba(89,112,151,.055); }
+    html[data-theme="light"] .poem-line { color:var(--text); }
+    html[data-theme="light"] .device-thumb { background:rgba(89,112,151,.055); }
+    html[data-theme="light"] footer { color:var(--footer-text); }
+
     @media (max-width:720px) {
       .device-row { flex-direction: column; }
       .device-thumb {
@@ -129,6 +162,7 @@
         <a href="index.html#skills">技能</a>
         <a class="active" href="devices.html">我的裝置</a>
       </div>
+      <button class="theme-toggle" type="button" aria-label="切換淺色模式" title="切換淺色模式"></button>
     </nav>
   </header>
 
@@ -155,7 +189,8 @@
               GPU：GIGABYTE RTX 5060 EAGLE OC<br>
               RAM：美光 DDR5-5600 16G×2 (32G)<br>
               SSD：雷克沙 NM790 M.2 2280 1TB<br>
-              效能的話我是蠻滿意的，R5 7500F 也算是 AM5 裡面 CP 值不錯的選擇，RTX 5060 應付 1080p 遊戲也是還不錯，缺點就是 8G VRAM 確實有點少了。<br>
+              效能的話我是蠻滿意的，R5 7500F 也算是 AM5 裡面 CP 值不錯的選擇，<br>
+              RTX 5060 應付 1080p 遊戲也是還不錯，缺點就是 8G VRAM 確實有點少了。<br>
               <span class="poem-line">海<span class="poem-highlight"> ⟪內存⟫ </span>知己，天涯若比鄰</span><br>
               32G 的 RAM 確實不用擔心，對我來說非常足夠；只是 1TB 的空間確實有點小，但不至於不夠用。
             </p>
@@ -169,7 +204,7 @@
         <article class="device-row">
           <img class="device-thumb" src="images/main-phone.jpg" alt="主力手機示意圖" onerror="this.style.display='none'">
           <div class="device-body">
-            <h3>我日常主力手機是 OPPO Reno 14 Pro</h3>
+            <h3>我日常主力手機是 OPPO Reno14 Pro</h3>
             <p> 
       從 2025 年 7 月用到現在整體來說，我對這支手機的使用體驗是相當滿意的<br>
       天璣 8450 的效能已經滿足我大部分的日常需求，
@@ -178,7 +213,8 @@
       不過我也不常用手機玩遊戲，所以對我來說影響不大<br><br>
       相機方面 : 平常主要用主鏡頭，而有長焦和廣角就有更多拍攝彈性 <br>
       6200mAh 的電池與 12+512G 無線充電 也都是我很重視的部分，對我來說它真的是一隻好手機<br>
-      雖然Reno系列在網路評價不是很好，我也承認它性價比確實不算高 不過它確實符合我的需求了 ColorOS 的流暢度表現也很穩定 
+      雖然Reno系列在網路評價不是很好，我也承認它性價比確實不算高 不過它確實符合我的需求了<br>
+      ColorOS雖然系統功能不如小米和三星 但是在介面審美和流暢度表現也都很穩定
       <br></p>
           </div>
         </article>
@@ -211,5 +247,28 @@
   </main>
 
   <footer>© 2026 品程的數位空間 版權所有，請勿盜用</footer>
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const button = document.querySelector('.theme-toggle');
+      const saved = localStorage.getItem('theme');
+      const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+
+      function applyTheme(theme) {
+        root.dataset.theme = theme;
+        button.textContent = theme === 'light' ? '🌙' : '☀️';
+        const label = theme === 'light' ? '切換為深色模式' : '切換為淺色模式';
+        button.setAttribute('aria-label', label);
+        button.setAttribute('title', label);
+      }
+
+      applyTheme(saved || preferred);
+      button.addEventListener('click', function () {
+        const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+        applyTheme(next);
+        localStorage.setItem('theme', next);
+      });
+    })();
+  </script>
 </body>
 </html>

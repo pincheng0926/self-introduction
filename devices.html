@@ -180,7 +180,8 @@
       .device-body { padding: 20px; }
       nav { grid-template-columns:1fr auto; }
       .navlinks {
-        position:absolute; top:68px; left:14px; right:14px;
+        position:absolute; top:60px; right:14px; left:auto;
+        width:min(280px, calc(100% - 28px));
         display:none; flex-direction:column; gap:0;
         padding:8px; border:1px solid var(--line); border-radius:16px;
         background:var(--panel-solid); backdrop-filter:blur(16px);

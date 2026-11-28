@@ -9,6 +9,7 @@
     :root {
       --bg: #0b1020;
       --panel: rgba(20, 29, 53, .78);
+      --panel-solid: #141d35;
       --header-bg: rgba(11,16,32,.72);
       --window-bg: rgba(17,24,43,.88);
       --titlebar-bg: rgba(255,255,255,.075);
@@ -25,6 +26,7 @@
     html[data-theme="light"] {
       --bg: #edf5ff;
       --panel: rgba(255,255,255,.88);
+      --panel-solid: #ffffff;
       --header-bg: rgba(255,255,255,.86);
       --window-bg: rgba(255,255,255,.94);
       --titlebar-bg: rgba(89,112,151,.08);
@@ -68,6 +70,35 @@
       cursor:pointer; font-size:1.1rem; transition:.2s;
     }
     .theme-toggle:hover { transform:translateY(-2px); border-color:var(--accent); }
+    .nav-actions { justify-self:end; display:flex; align-items:center; gap:8px; }
+    html[data-liquid-glass="true"] header,
+    html[data-liquid-glass="true"] .theme-toggle,
+    html[data-liquid-glass="true"] .menu-toggle,
+    html[data-liquid-glass="true"] .mobile-theme-toggle,
+    html[data-liquid-glass="true"] .mac-window,
+    html[data-liquid-glass="true"] .card,
+    html[data-liquid-glass="true"] .contact,
+    html[data-liquid-glass="true"] .navlinks.open {
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      backdrop-filter: blur(28px) saturate(180%);
+      border-color: rgba(255,255,255,.28);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        0 12px 36px rgba(44,72,120,.16);
+    }
+    html[data-liquid-glass="true"] .navlinks.open {
+      background:rgba(20,29,53,.92);
+    }
+    html[data-theme="light"][data-liquid-glass="true"] .navlinks.open {
+      background:rgba(255,255,255,.92);
+    }
+    .mobile-theme-toggle { display:none; }
+    .menu-toggle {
+      display:none; width:42px; height:42px; padding:0;
+      place-items:center; border:1px solid var(--line);
+      border-radius:50%; background:var(--panel); color:var(--text);
+      cursor:pointer; font-size:1.35rem;
+    }
     .eyebrow { color:var(--accent); font-weight:700; letter-spacing:2px; font-size:.85rem; }
     h1 { font-size: clamp(3rem, 8vw, 5.8rem); line-height:1.08; margin:14px 0 20px; letter-spacing:-2px; }
     h1 span { background:linear-gradient(100deg,var(--accent),var(--accent2)); color:transparent; background-clip:text; }
@@ -214,11 +245,29 @@
       .grid { grid-template-columns:1fr; }
       .about-grid { grid-template-columns:1fr; }
       .contact-grid { grid-template-columns:1fr; }
-      .navlinks { gap:12px; font-size:.82rem; }
+      nav { grid-template-columns:1fr auto; }
+      .navlinks {
+        position:absolute; top:68px; left:14px; right:14px;
+        display:none; flex-direction:column; gap:0;
+        padding:8px; border:1px solid var(--line); border-radius:16px;
+        background:var(--panel-solid); backdrop-filter:blur(16px);
+        box-shadow:0 18px 40px rgba(0,0,0,.16);
+      }
+      .navlinks.open { display:flex; }
+      .navlinks a { padding:12px 14px; border-radius:10px; }
+      .navlinks a:hover { background:var(--soft-bg); }
+      .nav-actions .theme-toggle { display:none; }
+      .mobile-theme-toggle {
+        display:flex; width:100%; min-height:44px; margin-top:6px;
+        align-items:center; gap:10px; padding:10px 14px;
+        border:1px solid var(--line); border-radius:10px;
+        background:transparent; color:var(--text); cursor:pointer;
+        font:inherit; text-align:left;
+      }
+      .menu-toggle { display:grid; }
       .logo { font-size:.9rem; }
     }
     @media (max-width:430px) {
-      .navlinks a:nth-child(2) { display:none; }
       .wrap { width:min(100% - 28px,1080px); }
     }
   </style>
@@ -232,8 +281,12 @@
         <a href="#interests">興趣</a>
         <a href="#skills">技能</a>
         <a href="devices.html">我的裝置</a>
+        <button class="mobile-theme-toggle" type="button" data-theme-toggle></button>
       </div>
-      <button class="theme-toggle" type="button" aria-label="切換淺色模式" title="切換淺色模式"></button>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle></button>
+        <button class="menu-toggle" type="button" aria-label="開啟選單" title="開啟選單" aria-expanded="false">☰</button>
+      </div>
     </nav>
   </header>
 
@@ -392,23 +445,49 @@
   <script>
     (function () {
       const root = document.documentElement;
-      const button = document.querySelector('.theme-toggle');
+      const buttons = document.querySelectorAll('[data-theme-toggle]');
       const saved = localStorage.getItem('theme');
       const preferred = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const iosVersion = (navigator.userAgent.match(/OS (\d+)[_]/) || [])[1];
+      root.dataset.liquidGlass = String(isIOS && iosVersion && Number(iosVersion) >= 26);
 
       function applyTheme(theme) {
         root.dataset.theme = theme;
-        button.textContent = theme === 'light' ? '🌙' : '☀️';
         const label = theme === 'light' ? '切換為深色模式' : '切換為淺色模式';
-        button.setAttribute('aria-label', label);
-        button.setAttribute('title', label);
+        buttons.forEach(function (button) {
+          const icon = theme === 'light' ? '🌙' : '☀️';
+          button.textContent = button.classList.contains('mobile-theme-toggle') ? icon + '  ' + label : icon;
+          button.setAttribute('aria-label', label);
+          button.setAttribute('title', label);
+        });
       }
 
       applyTheme(saved || preferred);
-      button.addEventListener('click', function () {
+      buttons.forEach(function (button) {
+        button.addEventListener('click', function () {
         const next = root.dataset.theme === 'light' ? 'dark' : 'light';
         applyTheme(next);
         localStorage.setItem('theme', next);
+        });
+      });
+
+      const menuButton = document.querySelector('.menu-toggle');
+      const navLinks = document.querySelector('.navlinks');
+      menuButton.addEventListener('click', function () {
+        const open = navLinks.classList.toggle('open');
+        menuButton.textContent = open ? '×' : '☰';
+        menuButton.setAttribute('aria-expanded', String(open));
+        menuButton.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
+        menuButton.setAttribute('title', open ? '關閉選單' : '開啟選單');
+      });
+      navLinks.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          navLinks.classList.remove('open');
+          menuButton.textContent = '☰';
+          menuButton.setAttribute('aria-expanded', 'false');
+        });
       });
     })();
   </script>
